@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Матричное Портфолио</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --matrix-green: #00cc33; /* Немного приглушенный зеленый */
+      --matrix-dark-green: #003b00;
+      --matrix-black: #0a0e0a;
+      --matrix-gray: #4e5654;
+      --glow-effect: 0 0 8px rgba(0, 204, 51, 0.7); /* Уменьшенное свечение */
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--matrix-green);
+      text-shadow: 0 0 3px rgba(0, 204, 51, 0.5); /* Уменьшаем интенсивность свечения текста */
+    }
+    
+    body {
+      background-color: var(--matrix-black);
+      overflow-x: hidden;
+    }
+    
+    #matrix-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 60px; /* Увеличиваем боковые отступы со всех сторон */
+      box-sizing: border-box; /* Учитываем padding в общей ширине */
+    }
+    
+    .glitch {
+      position: relative;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--matrix-green);
+      letter-spacing: 5px;
+      z-index: 1;
+    }
+    
+    .glitch:before, .glitch:after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.8;
+    }
+    
+    .glitch:before {
+      left: 2px;
+      text-shadow: -2px 0 var(--matrix-green);
+      animation: glitch-1 2s infinite linear alternate-reverse;
+      clip: rect(44px, 450px, 56px, 0);
+    }
+    
+    .glitch:after {
+      left: -2px;
+      text-shadow: -2px 0 var(--matrix-dark-green);
+      animation: glitch-2 1s infinite linear alternate-reverse;
+      clip: rect(44px, 450px, 46px, 0);
+    }
+    
+    @keyframes glitch-1 {
+      0% { clip: rect(2px, 450px, 14px, 0); }
+      20% { clip: rect(54px, 450px, 84px, 0); }
+      40% { clip: rect(23px, 450px, 44px, 0); }
+      60% { clip: rect(49px, 450px, 32px, 0); }
+      80% { clip: rect(14px, 450px, 96px, 0); }
+      100% { clip: rect(82px, 450px, 11px, 0); }
+    }
+    
+    @keyframes glitch-2 {
+      0% { clip: rect(21px, 450px, 84px, 0); }
+      20% { clip: rect(20px, 450px, 30px, 0); }
+      40% { clip: rect(67px, 450px, 72px, 0); }
+      60% { clip: rect(92px, 450px, 23px, 0); }
+      80% { clip: rect(31px, 450px, 16px, 0); }
+      100% { clip: rect(6px, 450px, 98px, 0); }
+    }
+    
+    /* Навигация */
+    .navbar {
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--matrix-green);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .navbar:before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--matrix-green), transparent);
+      animation: navGlow 3s linear infinite;
+    }
+    
+    @keyframes navGlow {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .logo:hover {
+      text-shadow: var(--glow-effect);
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+    
+    .nav-links li {
+      margin-left: 30px;
+      position: relative;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 5px 0;
+    }
+    
+    .nav-links a:hover {
+      text-shadow: var(--glow-effect);
+    }
+    
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--matrix-green);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+    
+    .nav-links a:hover:after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    
+    /* Главная секция */
+    .hero {
+      height: 85vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+    
+    .hero h1 {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+    
+    .cta-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: transparent;
+      border: 1px solid var(--matrix-green);
+      font-size: 16px;
+      text-transform: uppercase;
+      text-decoration: none;
+      letter-spacing: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      z-index: 1;
+    }
+    
+    .cta-btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--matrix-green);
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+    
+    .cta-btn:hover {
+      color: var(--matrix-black);
+      text-shadow: none;
+    }
+    
+    .cta-btn:hover:before {
+      left: 0;
+    }
+    
+    /* Улучшаем стиль печатающегося текста */
+    .typing-container {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      overflow: hidden; /* Предотвращаем прыжки контента */
+    }
+    
+    .typing-text {
+      font-size: 24px;
+      letter-spacing: 2px;
+      border-right: 2px solid var(--matrix-green);
+      padding-right: 5px; /* Небольшой отступ справа */
+      height: 36px; /* Фиксированная высота */
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      min-width: 10px; /* Минимальная ширина */
+      animation: cursorBlink 0.7s infinite;
+    }
+    
+    @keyframes cursorBlink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: var(--matrix-green); }
+    }
+    
+    /* О себе секция */
+    .about {
+      padding: 100px 0;
+      position: relative;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 50px;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--matrix-green), transparent);
+    }
+    
+    .about-content {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+      margin-top: 50px;
+    }
+    
+    .about-text {
+      flex: 1;
+    }
+    
+    .about-text p {
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    
+    .skills {
+      margin-top: 30px;
+    }
+    
+    .skill-title {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    
+    .skill-bars {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .skill-bar {
+      width: 100%;
+      margin-bottom: 25px;
+    }
+    
+    .skill-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    
+    .progress-line {
+      position: relative;
+      height: 10px;
+      width: 100%;
+      background: var(--matrix-dark-green);
+      border-radius: 5px;
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: loadSkill 1s 0.4s cubic-bezier(1,0,0.5,1) forwards;
+    }
+    
+    .progress-line span {
+      position: absolute;
+      height: 100%;
+      background: var(--matrix-green);
+      border-radius: 5px;
+      transition: width 0.5s ease;
+    }
+    
+    .progress-line span:before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -10px;
+      height: 0;
+      width: 0;
+      border: 7px solid transparent;
+      border-bottom-width: 0;
+      border-right-width: 0;
+      border-top-color: var(--matrix-green);
+    }
+    
+    @keyframes loadSkill {
+      100% { transform: scaleX(1); }
+    }
+    
+    .about-image {
+      flex: 1;
+      position: relative;
+      border: 1px solid var(--matrix-green);
+      height: 400px;
+    }
+    
+    .about-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.8) hue-rotate(120deg);
+      transition: all 0.5s ease;
+    }
+    
+    .about-image:hover img {
+      filter: brightness(1) hue-rotate(120deg);
+    }
+    
+    .about-image:before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: calc(100% + 20px);
+      height: calc(100% + 20px);
+      border: 1px solid var(--matrix-green);
+      z-index: -1;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+    }
+    
+    .about-image:hover:before {
+      top: -20px;
+      left: -20px;
+    }
+    
+    /* Портфолио секция */
+    .portfolio {
+      padding: 100px 0;
+    }
+    
+    .portfolio-filter {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 50px;
+    }
+    
+    .filter-btn {
+      padding: 8px 20px;
+      margin: 0 10px;
+      background: transparent;
+      border: 1px solid var(--matrix-green);
+      cursor: pointer;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+    
+    .filter-btn.active, .filter-btn:hover {
+      background-color: var(--matrix-green);
+      color: var(--matrix-black);
+      text-shadow: none;
+    }
+    
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-gap: 30px;
+    }
+    
+    .portfolio-item {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--matrix-green);
+      height: 300px;
+      display: none;
+    }
+    
+    .portfolio-item.show {
+      display: block;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .portfolio-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.5s ease;
+      filter: brightness(0.6) hue-rotate(120deg);
+    }
+    
+    .portfolio-info {
+      position: absolute;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      transition: all 0.5s ease;
+    }
+    
+    .portfolio-item:hover .portfolio-info {
+      bottom: 0;
+    }
+    
+    .portfolio-item:hover .portfolio-img {
+      transform: scale(1.1);
+      filter: brightness(0.4) hue-rotate(120deg);
+    }
+    
+    .portfolio-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    
+    .portfolio-cat {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+    
+    .portfolio-btn {
+      display: inline-block;
+      padding: 5px 15px;
+      margin-top: 10px;
+      background: transparent;
+      border: 1px solid var(--matrix-green);
+      font-size: 12px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .portfolio-btn:hover {
+      background-color: var(--matrix-green);
+      color: var(--matrix-black);
+      text-shadow: none;
+    }
+    
+    /* Фиксим слипшиеся рамки в карусели отзывов */
+    .testimonial-carousel {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      overflow: visible;
+      padding: 20px 0;
+    }
+    
+    .testimonial-track {
+      display: flex;
+      transition: transform 0.5s ease;
+      position: relative;
+      width: 100%;
+      gap: 40px; /* Добавляем отступ между слайдами */
+    }
+    
+    .testimonial-slide {
+      min-width: calc(100% - 40px); /* Уменьшаем ширину слайда, чтобы учесть отступ */
+      padding: 40px 50px;
+      background-color: rgba(0, 10, 0, 0.5);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 auto;
+      max-width: 90%;
+      box-sizing: border-box;
+      position: relative;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(0, 20, 0, 0.3);
+    }
+    
+    /* Создаем полную рамку с помощью псевдоэлемента */
+    .testimonial-slide:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(0, 204, 51, 0.4);
+      border-radius: 8px;
+      box-sizing: border-box;
+      pointer-events: none; /* Чтобы не мешало взаимодействию */
+      z-index: 1;
+    }
+    
+    /* Обновленные стили для точек пагинации */
+    .testimonial-dots {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .testimonial-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: rgba(0, 204, 51, 0.3);
+      margin: 0 7px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0.5;
+      position: relative;
+      border: 1px solid rgba(0, 204, 51, 0.1); /* Добавляем тонкую границу */
+    }
+    
+    /* Обновленные стили для кнопок навигации */
+    .testimonial-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .testimonial-btn {
+      background: rgba(0, 10, 0, 0.5);
+      border: 1px solid rgba(0, 204, 51, 0.5);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin: 0 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      opacity: 0.7;
+      position: relative;
+      z-index: 2;
+    }
+    
+    /* Контактная секция */
+    .contact {
+      padding: 100px 0;
+    }
+    
+    .contact-wrapper {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .contact-wrapper {
+      display: flex;
+      gap: 40px; /* Увеличиваем расстояние между формой и контактной информацией */
+      margin: 0 auto;
+      max-width: 1100px; /* Ограничиваем максимальную ширину, чтобы не растягивать на широких экранах */
+    }
+    
+    .contact-form {
+      flex: 1;
+      padding: 40px; /* Увеличиваем внутренние отступы */
+      border: 1px solid var(--matrix-green);
+      background-color: rgba(0, 10, 0, 0.6);
+      border-radius: 5px;
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+    }
+    
+    .form-title, .info-title {
+      font-size: 24px;
+      margin-bottom: 25px;
+      color: var(--matrix-green);
+      border-bottom: 1px solid var(--matrix-green);
+      padding-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    .form-group {
+      margin-bottom: 30px; /* Увеличиваем отступ между полями формы */
+      position: relative;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: var(--matrix-green);
+      letter-spacing: 1px;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 15px 20px; /* Увеличиваем внутренние отступы для лучшей читаемости */
+      background: rgba(0, 20, 0, 0.4); /* Немного темный фон для контраста */
+      border: 1px solid var(--matrix-dark-green);
+      border-bottom: 2px solid var(--matrix-green);
+      outline: none;
+      font-size: 16px;
+      font-weight: 400;
+      transition: all 0.3s ease;
+      color: var(--matrix-green);
+      border-radius: 3px 3px 0 0;
+    }
+    
+    .form-control::placeholder {
+      color: rgba(0, 255, 65, 0.5); /* Более яркий цвет для плейсхолдера */
+      opacity: 1;
+    }
+    
+    .form-control:focus {
+      border-bottom: 2px solid #00ff41;
+      box-shadow: 0 1px 0 0 #00ff41, 0 0 10px rgba(0, 255, 65, 0.3);
+      background-color: rgba(0, 30, 0, 0.5); /* Немного светлее при фокусе */
+    }
+    
+    textarea.form-control {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      background: transparent;
+      border: 2px solid var(--matrix-green);
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      margin-top: 15px;
+      color: var(--matrix-green);
+      text-shadow: 0 0 5px var(--matrix-green);
+      border-radius: 3px;
+    }
+    
+    .submit-btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--matrix-green);
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+    
+    .submit-btn:hover {
+      color: var(--matrix-black);
+      text-shadow: none;
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+    }
+    
+    .submit-btn:hover:before {
+      left: 0;
+    }
+    
+    .contact-info {
+      flex: 1;
+      padding: 40px;
+      border: 1px solid var(--matrix-green);
+      background-color: rgba(0, 10, 0, 0.6);
+      border-radius: 5px;
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 30px;
+    }
+    
+    .info-icon {
+      width: 50px;
+      height: 50px;
+      border: 1px solid var(--matrix-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      font-size: 20px;
+    }
+    
+    .info-text h4 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    
+    .info-text p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--matrix-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .social-icon:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--matrix-green);
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+    
+    .social-icon:hover {
+      color: var(--matrix-black);
+    }
+    
+    .social-icon:hover:before {
+      left: 0;
+    }
+    
+    /* Подвал */
+    .footer {
+      padding: 30px 0;
+      text-align: center;
+      border-top: 1px solid var(--matrix-green);
+    }
+    
+    .footer p {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+    
+    /* Плавный скролл */
+    .scroll-down {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 50px;
+      border: 2px solid var(--matrix-green);
+      border-radius: 15px;
+      cursor: pointer;
+    }
+    
+    .scroll-down:before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      margin-left: -3px;
+      background-color: var(--matrix-green);
+      border-radius: 50%;
+      animation: scrollDown 2s infinite;
+    }
+    
+    @keyframes scrollDown {
+      0% { transform: translateY(0); opacity: 1; }
+      80% { transform: translateY(20px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 0; }
+    }
+    
+    /* Портфолио - отступы для сетки */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-gap: 40px; /* Увеличиваем отступы между проектами */
+      padding: 20px 0; /* Добавляем вертикальные отступы */
+      margin: 0 auto;
+      max-width: 95%; /* Немного уменьшаем ширину сетки относительно контейнера */
+    }
+    
+    /* Форма контактов - отступы */
+    .contact-wrapper {
+      display: flex;
+      gap: 50px; /* Увеличиваем расстояние между формой и контактной информацией */
+      margin: 0 auto;
+      max-width: 90%; /* Уменьшаем максимальную ширину относительно контейнера */
+      padding: 20px 0; /* Добавляем вертикальные отступы */
+    }
+    
+    /* Общие отступы для контента */
+    .hero, .about, .portfolio, .testimonials, .contact {
+      margin-bottom: 50px; /* Добавляем отступы между секциями */
+    }
+    
+    /* Адаптивность с сохранением отступов */
+    @media screen and (max-width: 1200px) {
+      .container {
+        padding: 0 40px; /* Немного уменьшаем боковые отступы на меньших экранах */
+      }
+    }
+    
+    @media screen and (max-width: 991px) {
+      .about-content {
+        flex-direction: column;
+        padding: 0 30px; /* Добавляем боковые отступы */
+      }
+      
+      .contact-wrapper {
+        flex-direction: column;
+        gap: 40px;
+        max-width: 95%; /* Увеличиваем ширину на меньших экранах */
+      }
+      
+      .container {
+        padding: 0 30px;
+      }
+    }
+    
+    @media screen and (max-width: 768px) {
+      .hero h1 {
+        font-size: 3rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .mobile-menu {
+        display: block;
+      }
+      
+      .container {
+        padding: 0 25px; /* Еще уменьшаем боковые отступы на мобильных */
+      }
+      
+      .portfolio-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-gap: 25px;
+      }
+      
+      .testimonial-slide {
+        padding: 30px;
+      }
+    }
+    
+    @media screen and (max-width: 480px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+      }
+      
+      .filter-btn {
+        margin: 5px;
+        font-size: 12px;
+        padding: 6px 12px;
+      }
+      
+      .container {
+        padding: 0 20px;
+      }
+      
+      .contact-form, .contact-info {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix-background"></canvas>
+  
+  <header class="navbar container">
+    <div class="logo">Матрица<span style="color: #fff;">_</span></div>
+    <ul class="nav-links">
+      <li><a href="#home">Главная</a></li>
+      <li><a href="#about">О себе</a></li>
+      <li><a href="#portfolio">Проекты</a></li>
+      <li><a href="#testimonials">Отзывы</a></li>
+      <li><a href="#contact">Контакты</a></li>
+    </ul>
+  </header>
+  
+  <section id="home" class="hero container">
+    <h1 class="glitch" data-text="Neo Anderson">Neo Anderson</h1>
+    <div class="typing-container">
+      <div class="typing-text" id="typing-text">Разработчик | Дизайнер | Хакер</div>
+    </div>
+    <p>Добро пожаловать в мою цифровую реальность. Я создаю инновационные проекты, которые находятся за пределами привычного восприятия. Погрузитесь в мир кода и творчества.</p>
+    <a href="#portfolio" class="cta-btn">Мои проекты</a>
+    
+    <div class="scroll-down"></div>
+  </section>
+  
+  <section id="about" class="about container">
+    <h2 class="section-title">О себе</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <p>Я - разработчик с многолетним опытом в области веб-разработки и дизайна. Моя страсть к технологиям и инновациям позволяет мне создавать уникальные проекты, которые не только функциональны, но и визуально привлекательны.</p>
+        <p>Выйдя за пределы стандартного мышления, я всегда ищу новые способы решения задач и создания по-настоящему впечатляющих пользовательских интерфейсов. Моя философия - "Нет ограничений, есть только возможности".</p>
+        
+        <div class="skills">
+          <h3 class="skill-title">Мои навыки</h3>
+          <div class="skill-bars">
+            <div class="skill-bar">
+              <div class="skill-info">
+                <span>HTML/CSS</span>
+                <span>95%</span>
+              </div>
+              <div class="progress-line">
+                <span style="width: 95%"></span>
+              </div>
+            </div>
+            
+            <div class="skill-bar">
+              <div class="skill-info">
+                <span>JavaScript</span>
+                <span>90%</span>
+              </div>
+              <div class="progress-line">
+                <span style="width: 90%"></span>
+              </div>
+            </div>
+            
+            <div class="skill-bar">
+              <div class="skill-info">
+                <span>React</span>
+                <span>85%</span>
+              </div>
+              <div class="progress-line">
+                <span style="width: 85%"></span>
+              </div>
+            </div>
+            
+            <div class="skill-bar">
+              <div class="skill-info">
+                <span>Node.js</span>
+                <span>80%</span>
+              </div>
+              <div class="progress-line">
+                <span style="width: 80%"></span>
+              </div>
+            </div>
+            
+            <div class="skill-bar">
+              <div class="skill-info">
+                <span>UI/UX Design</span>
+                <span>75%</span>
+              </div>
+              <div class="progress-line">
+                <span style="width: 75%"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="about-image">
+        <img src="/api/placeholder/400/400" alt="Профиль">
+      </div>
+    </div>
+  </section>
+  
+  <section id="portfolio" class="portfolio container">
+    <h2 class="section-title">Мои проекты</h2>
+    <div class="portfolio-filter">
+      <button class="filter-btn active" data-filter="all">Все</button>
+      <button class="filter-btn" data-filter="web">Веб</button>
+      <button class="filter-btn" data-filter="app">Приложения</button>
+      <button class="filter-btn" data-filter="design">Дизайн</button>
+    </div>
+    
+    <div class="portfolio-grid">
+      <div class="portfolio-item show" data-category="web">
+        <img src="/api/placeholder/400/300" alt="Проект 1" class="portfolio-img">
+        <div class="portfolio-info">
+          <h3 class="portfolio-title">Сайт компании</h3>
+          <p class="portfolio-cat">Веб-разработка</p>
+          <a href="#" class="portfolio-btn">Подробнее</a>
+        </div>
+      </div>
+      
+      <div class="portfolio-item show" data-category="app">
+        <img src="/api/placeholder/400/300" alt="Проект 2" class="portfolio-img">
+        <div class="portfolio-info">
+          <h3 class="portfolio-title">Мобильное приложение</h3>
+          <p class="portfolio-cat">Разработка приложений</p>
+          <a href="#" class="portfolio-btn">Подробнее</a>
+        </div>
+      </div>
+      
+      <div class="portfolio-item show" data-category="design">
+        <img src="/api/placeholder/400/300" alt="Проект 3" class="portfolio-img">
+        <div class="portfolio-info">
+          <h3 class="portfolio-title">Брендинг</h3>
+          <p class="portfolio-cat">Дизайн</p>
+          <a href="#" class="portfolio-btn">Подробнее</a>
+        </div>
+      </div>
+      
+      <div class="portfolio-item show" data-category="web">
+        <img src="/api/placeholder/400/300" alt="Проект 4" class="portfolio-img">
+        <div class="portfolio-info">
+          <h3 class="portfolio-title">Платформа E-commerce</h3>
+          <p class="portfolio-cat">Веб-разработка</p>
+          <a href="#" class="portfolio-btn">Подробнее</a>
+        </div>
+      </div>
+      
+      <div class="portfolio-item show" data-category="app">
+        <img src="/api/placeholder/400/300" alt="Проект 5" class="portfolio-img">
+        <div class="portfolio-info">
+          <h3 class="portfolio-title">Игровое приложение</h3>
+          <p class="portfolio-cat">Разработка приложений</p>
+          <a href="#" class="portfolio-btn">Подробнее</a>
+        </div>
+      </div>
+      
+      <div class="portfolio-item show" data-category="design">
+        <img src="/api/placeholder/400/300" alt="Проект 6" class="portfolio-img">
+        <div class="portfolio-info">
+          <h3 class="portfolio-title">Дизайн интерфейса</h3>
+          <p class="portfolio-cat">UI/UX дизайн</p>
+          <a href="#" class="portfolio-btn">Подробнее</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section id="testimonials" class="testimonials">
+    <div class="container">
+      <h2 class="section-title">Отзывы</h2>
+      
+      <div class="testimonial-carousel">
+        <div class="testimonial-track">
+          <div class="testimonial-slide">
+            <div class="testimonial-text">
+              Сотрудничество с Neo было потрясающим опытом. Он не просто создал сайт, он создал настоящее произведение искусства, которое привлекает внимание и увеличивает конверсию. Его подход к работе и внимание к деталям - именно то, что нужно любому бизнесу.
+            </div>
+            <h4 class="testimonial-author">Александр Морфеус</h4>
+            <p class="testimonial-company">CEO, Zion Inc.</p>
+          </div>
+          
+          <div class="testimonial-slide">
+            <div class="testimonial-text">
+              Работа с Neo - это как заглянуть в будущее веб-разработки. Его интерфейсы интуитивно понятны, анимации плавные, а код чистый и оптимизированный. Наш проект был выполнен в срок с превосходным качеством, что редкость в нашей индустрии.
+            </div>
+            <h4 class="testimonial-author">Тринити Лоуренс</h4>
+            <p class="testimonial-company">CTO, Digital Rebels</p>
+          </div>
+          
+          <div class="testimonial-slide">
+            <div class="testimonial-text">
+              Neo помог нам переосмыслить наш бренд. Его дизайнерские решения вызвали восторг у нашей команды и клиентов. Мы получили не просто веб-сайт, а целую экосистему, которая работает на привлечение и удержание клиентов. Невероятный профессионал!
+            </div>
+            <h4 class="testimonial-author">Тёма Кан</h4>
+            <p class="testimonial-company">Marketing Director, Matrix Solutions</p>
+          </div>
+        </div>
+        
+        <div class="testimonial-nav">
+          <button class="testimonial-btn prev">&#10094;</button>
+          <button class="testimonial-btn next">&#10095;</button>
+        </div>
+        
+        <div class="testimonial-dots">
+          <span class="testimonial-dot active" data-slide="0"></span>
+          <span class="testimonial-dot" data-slide="1"></span>
+          <span class="testimonial-dot" data-slide="2"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section id="contact" class="contact container">
+    <h2 class="section-title">Связаться со мной</h2>
+    
+    <div class="contact-wrapper">
+      <form class="contact-form">
+        <h3 class="form-title">Отправить сообщение</h3>
+        
+        <div class="form-group">
+          <label for="name">Ваше имя</label>
+          <input type="text" id="name" class="form-control" placeholder="Введите ваше имя" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Ваш email</label>
+          <input type="email" id="email" class="form-control" placeholder="Введите ваш email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="subject">Тема сообщения</label>
+          <input type="text" id="subject" class="form-control" placeholder="Введите тему сообщения">
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Ваше сообщение</label>
+          <textarea id="message" class="form-control" placeholder="Введите ваше сообщение..." rows="5" required></textarea>
+        </div>
+        
+        <button type="submit" class="submit-btn">ОТПРАВИТЬ</button>
+      </form>
+      
+      <div class="contact-info">
+        <h3 class="info-title">Контактная информация</h3>
+        
+        <div class="info-item">
+          <div class="info-icon">
+            <i>&#9993;</i>
+          </div>
+          <div class="info-text">
+            <h4>Email</h4>
+            <p>neo@thematrix.com</p>
+          </div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-icon">
+            <i>&#9742;</i>
+          </div>
+          <div class="info-text">
+            <h4>Телефон</h4>
+            <p>+7 (999) 123-45-67</p>
+          </div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-icon">
+            <i>&#9755;</i>
+          </div>
+          <div class="info-text">
+            <h4>Адрес</h4>
+            <p>г. Москва, ул. Матричная, д. 42</p>
+          </div>
+        </div>
+        
+        <div class="social-icons">
+          <a href="#" class="social-icon">Fb</a>
+          <a href="#" class="social-icon">Tw</a>
+          <a href="#" class="social-icon">In</a>
+          <a href="#" class="social-icon">Gt</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Neo Anderson. Все права защищены.</p>
+    </div>
+  </footer>
+  
+  <!-- JavaScript -->
+  <script>
+    // Матричный фон
+    document.addEventListener('DOMContentLoaded', function() {
+      const canvas = document.getElementById('matrix-background');
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      const matrixChars = "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const drops = [];
+      const fontSize = 16;
+      const columns = canvas.width / fontSize;
+      
+      // Инициализация капель
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+      }
+      
+      function draw() {
+        // Полупрозрачный черный фон для создания эффекта затухания
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)'; // Более медленное затухание
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = 'rgba(0, 204, 51, 0.8)'; // Более мягкий матричный зеленый с прозрачностью
+        ctx.font = fontSize + 'px monospace';
+        
+        // Отрисовка символов
+        for (let i = 0; i < drops.length; i++) {
+          // Добавляем немного вариаций в яркость
+          const opacity = Math.random() * 0.3 + 0.5; 
+          ctx.fillStyle = `rgba(0, 204, 51, ${opacity})`;
+          
+          const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+          
+          // Вероятность 1%, что капля вернется вверх после достижения дна
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          
+          // Перемещение капли вниз
+          drops[i]++;
+        }
+      }
+      
+      // Остальной JavaScript остается без изменений...
+      
+      // Полностью переработанный эффект печатающегося текста с фиксированной скоростью
+    function typeEffect() {
+      const typingText = document.getElementById('typing-text');
+      const textArray = ["Разработчик | Дизайнер | Хакер", "Создаю цифровые миры", "Превращаю идеи в реальность", "Взламываю матрицу каждый день"];
+      let textIndex = 0;
+      
+      function typeWriter() {
+        // Очищаем текущий таймер, если есть
+        if (window.typeTimer) clearTimeout(window.typeTimer);
+        
+        // Получаем текущий текст для печати
+        const currentText = textArray[textIndex];
+        
+        // Сначала медленно печатаем
+        let i = 0;
+        typingText.textContent = '';
+        
+        function addChar() {
+          if (i < currentText.length) {
+            typingText.textContent += currentText.charAt(i);
+            i++;
+            window.typeTimer = setTimeout(addChar, 100); // Постоянная скорость 100мс на символ
+          } else {
+            // Когда напечатали весь текст, ждем 2 секунды
+            window.typeTimer = setTimeout(eraseText, 2000);
+          }
+        }
+        
+        // Функция удаления текста
+        function eraseText() {
+          let currentContent = typingText.textContent;
+          if (currentContent.length > 0) {
+            typingText.textContent = currentContent.slice(0, -1);
+            window.typeTimer = setTimeout(eraseText, 60); // Постоянная скорость стирания
+          } else {
+            // Когда стерли весь текст, переходим к следующей фразе
+            textIndex = (textIndex + 1) % textArray.length;
+            window.typeTimer = setTimeout(typeWriter, 800); // Пауза между фразами
+          }
+        }
+        
+        addChar(); // Начинаем печатать
+      }
+      
+      // Запускаем печатную машинку
+      typeWriter();
+    }
+      
+      // Фильтрация портфолио
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const portfolioItems = document.querySelectorAll('.portfolio-item');
+      
+      function filterPortfolio() {
+        filterButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            // Активация кнопки
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            const filterValue = this.getAttribute('data-filter');
+            
+            portfolioItems.forEach(item => {
+              // Скрываем все элементы
+              item.classList.remove('show');
+              
+              // Показываем только нужные
+              if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                setTimeout(() => {
+                  item.classList.add('show');
+                }, 200);
+              }
+            });
+          });
+        });
+      }
+      
+      // Карусель отзывов - JavaScript с учетом отступов между слайдами
+    function testimonialCarousel() {
+      const track = document.querySelector('.testimonial-track');
+      const slides = document.querySelectorAll('.testimonial-slide');
+      const prevBtn = document.querySelector('.prev');
+      const nextBtn = document.querySelector('.next');
+      const dots = document.querySelectorAll('.testimonial-dot');
+      const gap = 40; // Размер отступа между слайдами (должен соответствовать CSS)
+      let currentIndex = 0;
+      
+      // Функция для получения ширины слайда с учетом отступа
+      function getSlideWidth() {
+        // Получаем полную ширину слайда
+        const slideWidth = slides[0].offsetWidth;
+        // Возвращаем ширину с учетом отступа
+        return slideWidth + gap;
+      }
+      
+      // Обновление позиции слайдов с учетом отступов
+      function updateSlidePosition() {
+        const slideWidth = getSlideWidth();
+        track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        
+        dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === currentIndex);
+        });
+      }
+      
+      // Кнопки навигации
+      prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        updateSlidePosition();
+      });
+      
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateSlidePosition();
+      });
+      
+      // Навигация по точкам
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          currentIndex = index;
+          updateSlidePosition();
+        });
+      });
+      
+      // Обновляем при изменении размера окна
+      window.addEventListener('resize', () => {
+        updateSlidePosition();
+      });
+      
+      // Инициализация позиции
+      updateSlidePosition();
+      
+      // Автоматическое пролистывание с паузой при наведении
+      let autoplayInterval;
+      
+      function startAutoplay() {
+        autoplayInterval = setInterval(() => {
+          currentIndex = (currentIndex + 1) % slides.length;
+          updateSlidePosition();
+        }, 5000); // 5 секунд между слайдами
+      }
+      
+      function stopAutoplay() {
+        clearInterval(autoplayInterval);
+      }
+      
+      // Останавливаем автоматическое пролистывание при наведении
+      track.addEventListener('mouseenter', stopAutoplay);
+      track.addEventListener('mouseleave', startAutoplay);
+      
+      // Запускаем автоматическое пролистывание
+      startAutoplay();
+    }
+      
+      // Плавный скролл
+      function smoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            window.scrollTo({
+              top: targetElement.offsetTop,
+              behavior: 'smooth'
+            });
+          });
+        });
+        
+        document.querySelector('.scroll-down').addEventListener('click', () => {
+          window.scrollTo({
+            top: document.getElementById('about').offsetTop,
+            behavior: 'smooth'
+          });
+        });
+      }
+      
+      // Обработка отправки формы
+      const contactForm = document.querySelector('.contact-form');
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Анимация успешной отправки
+        const submitBtn = this.querySelector('.submit-btn');
+        const originalText = submitBtn.textContent;
+        
+        submitBtn.textContent = 'Отправлено!';
+        submitBtn.style.background = 'var(--matrix-green)';
+        submitBtn.style.color = 'var(--matrix-black)';
+        
+        // Сброс формы и возврат кнопки в исходное состояние
+        setTimeout(() => {
+          this.reset();
+          submitBtn.textContent = originalText;
+          submitBtn.style.background = 'transparent';
+          submitBtn.style.color = 'var(--matrix-green)';
+        }, 3000);
+      });
+      
+      // Интерактивные эффекты при скролле
+      function scrollEffects() {
+        const sections = document.querySelectorAll('section');
+        
+        window.addEventListener('scroll', () => {
+          const scrollPos = window.scrollY + window.innerHeight * 0.7;
+          
+          sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            
+            if (scrollPos > sectionTop && scrollPos < sectionTop + sectionHeight) {
+              section.classList.add('active-section');
+            }
+          });
+        });
+      }
+      
+      // Анимация загрузки страницы
+      function pageLoadAnimation() {
+        const body = document.body;
+        body.style.opacity = '0';
+        
+        setTimeout(() => {
+          body.style.transition = 'opacity 1s ease';
+          body.style.opacity = '1';
+        }, 500);
+      }
+      
+      // Вызов всех функций
+      setInterval(draw, 33); // ~30fps для матричного фона
+      typeEffect();
+      filterPortfolio();
+      testimonialCarousel();
+      smoothScroll();
+      scrollEffects();
+      pageLoadAnimation();
+      
+      // Обработка изменения размера окна
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+    });
+  </script>
+</body>
+</html>
