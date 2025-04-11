@@ -107,7 +107,14 @@
       position: relative;
       overflow: hidden;
     }
+    /* Добавьте в раздел стилей */
+    .social-icon svg {
+      transition: all 0.3s ease;
+    }
     
+    .social-icon:hover svg {
+      stroke: var(--matrix-black); /* Изменение цвета иконки при наведении */
+    }
     .navbar:before {
       content: '';
       position: absolute;
