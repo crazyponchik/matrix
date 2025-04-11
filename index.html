@@ -822,37 +822,49 @@
       opacity: 0.7;
     }
     
-    /* Плавный скролл */
     .scroll-down {
       position: absolute;
       bottom: 30px;
       left: 50%;
       transform: translateX(-50%);
-      width: 30px;
-      height: 50px;
-      border: 2px solid var(--matrix-green);
-      border-radius: 15px;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 15px solid var(--matrix-green);
+      animation: glitch 1.2s infinite steps(2, end);
+      opacity: 0.8;
+      filter: drop-shadow(0 0 4px var(--matrix-green));
       cursor: pointer;
     }
     
-    .scroll-down:before {
-      content: '';
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      width: 6px;
-      height: 6px;
-      margin-left: -3px;
-      background-color: var(--matrix-green);
-      border-radius: 50%;
-      animation: scrollDown 2s infinite;
+    @keyframes glitch {
+      0% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 0.8;
+      }
+      20% {
+        transform: translateX(-48%) translateY(-2px);
+        opacity: 1;
+      }
+      40% {
+        transform: translateX(-52%) translateY(1px);
+        opacity: 0.6;
+      }
+      60% {
+        transform: translateX(-50%) translateY(-1px);
+        opacity: 1;
+      }
+      80% {
+        transform: translateX(-51%) translateY(2px);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 0.8;
+      }
     }
-    
-    @keyframes scrollDown {
-      0% { transform: translateY(0); opacity: 1; }
-      80% { transform: translateY(20px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 0; }
-    }
+
     
     /* Портфолио - отступы для сетки */
     .portfolio-grid {
@@ -1295,7 +1307,7 @@
       // Полностью переработанный эффект печатающегося текста с фиксированной скоростью
     function typeEffect() {
       const typingText = document.getElementById('typing-text');
-      const textArray = ["Разработчик | Скриптер | WHOAMI", "Attention is All YOu Need", "Превращаю идеи в реальность", "Взламываю матрицу каждый день"];
+      const textArray = ["Разработчик | Скриптер | WHOAMI", "Attention is All You Need", "Превращаю идеи в реальность", "Взламываю матрицу каждый день"];
       let textIndex = 0;
       
       function typeWriter() {
